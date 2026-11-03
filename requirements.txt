@@ -1,0 +1,2 @@
+# No third-party packages: the ledger, sync server and tests use only the Python standard library.
+# AI suggestions call the `claude` CLI (Claude Code), not a Python SDK.

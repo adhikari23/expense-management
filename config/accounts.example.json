@@ -1,0 +1,33 @@
+{
+  "_comment": "Copy to config/accounts.json and replace everything with your own details. config/accounts.json is git-ignored. All values below are made up.",
+
+  "_owner_names": "Your name as banks print it in SMS. Transfers to/from these names are treated as moves between your own accounts.",
+  "owner_names": ["RAVI KUMAR", "RAVIKUMAR"],
+  "_owner_exact_names": "Matched only when the payee is exactly this (some banks truncate UPI names, e.g. 'To RAVI').",
+  "owner_exact_names": ["RAVI"],
+
+  "_accounts": "One entry per account/card/loan. 'families' = SMS sender codes (VM-HDFCBK-S -> HDFCBK). 'numbers' = the digits the bank prints (suffix is enough). 'default': use this account when the SMS shows no number.",
+  "accounts": [
+    {"id": "hdfc_savings", "type": "savings", "families": ["HDFCBK", "HDFCBN"], "numbers": ["1111"], "debit_cards": ["4444"]},
+    {"id": "hdfc_card", "type": "credit_card", "families": ["HDFCBK", "HDFCBN"], "numbers": ["2222"]},
+    {"id": "icici_card", "type": "credit_card", "families": ["ICICIT"], "numbers": ["5555"], "default": true},
+    {"id": "sbi_card", "type": "credit_card", "families": ["SBICRD", "MYSBIC"], "numbers": ["3333", "33"], "default": true},
+    {"id": "scapia_card", "type": "credit_card", "families": ["FEDSCP"], "numbers": ["6666"], "default": true},
+    {"id": "sbi_savings", "type": "savings", "families": ["CBSSBI", "SBIUPI", "SBIINB"], "numbers": ["099999"]},
+    {"id": "home_loan", "type": "loan", "families": ["CBSSBI", "SBIBNK"], "numbers": ["700001"],
+     "_emi_mandates": "NACH mandate reference (UMRN) printed in the EMI debit SMS, to tell several loans apart.",
+     "emi_mandates": ["HDFC0000000000000002"], "default_emi": true, "default_prepayment": true,
+     "emi_category": "Home Loan EMI", "prepayment_category": "Home Loan Prepayment"}
+  ],
+
+  "card_bill_payees": ["CRED", "CRED CLUB", "SCAPIA", "SBI CARD", "SBICARD", "BILLDESK", "BBPS", "CREDIT CARD", "CC PAYMENT", "PAYZAPP"],
+  "loan_emi_payees": ["RETAIL ASSETS CPC"],
+  "salary_payers": ["ACME TECH"],
+  "own_deposit_payees": ["FD THROUGH", "PPF SSY"],
+
+  "_upi_spend_max": "Uncategorised UPI payments below this (INR) go to 'UPI Spend'; at or above it they go to 'Needs Review'.",
+  "upi_spend_max": 500,
+
+  "_extra_keywords": "Optional: your own merchant words per category (matched against the payee name).",
+  "extra_keywords": {"Food & Dining": ["my favourite cafe"]}
+}

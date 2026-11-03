@@ -1,0 +1,23 @@
+# --- Personal data: never commit ---
+# Your SMS copy, ledger.db, tags (rules.json), published CSV, backups and logs
+data/
+# Your real accounts, card/loan numbers and names (copy from accounts.example.json)
+config/accounts.json
+config/*.key
+config/anthropic_api_key
+
+# --- Local tooling / environment ---
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+# Diagram work folders (the published diagram is docs/architecture.html)
+.archify/
+.vcat/
+.claude/
+app/.claude/
+*.bak
+*.bak.*
+
+# Demo mode output (scripts/demo.py), rebuilt on demand
+demo/
