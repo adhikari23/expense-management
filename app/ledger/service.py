@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import json
 import shutil
 import sqlite3
 import threading
@@ -13,7 +14,7 @@ from pathlib import Path
 from app.ledger import categories, ingest, manual, store
 from app.ledger.build import build
 from app.ledger.checks import COUNTED, reconcile_cards, run_checks
-from app.ledger.config import DATA_DIR, load_config
+from app.ledger.config import CONFIG_PATH, DATA_DIR, load_config
 
 OUT_DIR = DATA_DIR / "ledger"
 DASHBOARD_CSV = DATA_DIR / "transactions.csv"
@@ -117,6 +118,23 @@ def review_queue(limit: int = 50, month: str | None = None) -> list[dict]:
     ).fetchall()
     con.close()
     return [dict(r) for r in rows]
+
+
+def export_snapshot() -> dict:
+    """Everything the phone needs to run the ledger on its own (Aptiq on-device mode):
+    raw bank SMS, your accounts config, payee tags/edits and manual entries.
+    Reads new SMS from chat.db first, so the phone gets everything up to now."""
+    refresh(do_ingest=True, publish=True)
+    con = store.connect()
+    messages = [dict(r) for r in con.execute(
+        "SELECT msg_id, guid, ts, sender_id, body, body_source FROM raw_messages ORDER BY msg_id")]
+    con.close()
+    return {
+        "messages": messages,
+        "config": json.loads(CONFIG_PATH.read_text()),
+        "rules": categories.load_rules(),
+        "manual": manual.load(),
+    }
 
 
 def lookup_msg_id(tid: str) -> int | None:

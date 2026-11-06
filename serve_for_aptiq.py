@@ -7,6 +7,8 @@
   GET    /holdings.json             investments holdings (unchanged)
   GET    /categories                valid categories
   GET    /review?month=YYYY-MM&limit=50   'Needs Review' payees, biggest money first
+  GET    /export                    raw SMS + config + rules + manual entries, for Aptiq's
+                                     on-device mode (one-time move to the phone)
   POST   /refresh                   read new SMS from chat.db, rebuild, republish
   POST   /review/suggest            {"month"?, "limit"?}  AI category suggestions (Claude) for review payees
   POST   /rules                     {"payee_key", "category", "name"?}  tag a payee everywhere
@@ -137,6 +139,8 @@ class Handler(BaseHTTPRequestHandler):
             limit = int(q.get("limit", ["50"])[0])
             month = q.get("month", [None])[0] or None
             self._json(200, {"month": month, "payees": service.review_queue(limit, month=month)})
+        elif url.path == "/export":
+            self._json(200, service.export_snapshot())
         elif url.path == "/health":
             self._json(200, {"ok": True})
         else:
